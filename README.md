@@ -70,10 +70,12 @@ printf("\n Average waiting time is %5.2f\n average tat is%5.2f",awt,atat); }
 ## OUTPUT:
 ![](1.png)
 
-## RESULT: First-Come-First-Serve Scheduling is implemented successfully.
+## RESULT: 
+First-Come-First-Serve Scheduling is implemented successfully.
 
 # Shortest Job First (SJF) Preemptive Scheduling
-## AIM: To implement Shortest Job First (SJF) Preemptive Scheduling
+## AIM: 
+To implement Shortest Job First (SJF) Preemptive Scheduling
 
 ## ALGORITHM:
 1. Initialize variables and arrays to store process information, such as process ID (p), arrival time (at), burst time (bt), start time (st), finish time (ft), waiting time (wt), turnaround time (tt), response ratio (rr), and a flag to mark completed processes (iscompleted).
@@ -172,6 +174,24 @@ Shortest Job First (SJF) preemptive scheduling is implemented successfully.
 To implement Shortest Job First (SJF) Non-Preemptive Scheduling
 
 ## ALGORITHM:
+1. Initialize variables and arrays to store process information, such as process ID (process_id), arrival time (arrival_time), burst time (burst_time), completion time (completion_time), waiting time (waiting_time), and turnaround time (turnaround_time).
+
+2. Read the number of processes (n) from the user.
+
+3. Input process information for each process, including arrival time and burst time, and store this information in the respective arrays.
+
+4. Sort the processes based on their arrival times in ascending order using a simple bubble sort algorithm. This step ensures that processes are in the order of their arrival.
+
+5. Initialize the current time (time) to 0.
+
+6. Perform the scheduling loop for all processes:
+     a. Find the process with the smallest burst time that has already arrived and is not yet completed. Initialize "shortest_job" to -1 and "shortest_time" to a large initial value.
+     b. Iterate through the processes, checking if they have arrived and if their burst time is smaller than the current "shortest_time." If so, update "shortest_job" to the current process.
+     c. If "shortest_job" remains -1, it means no process is available to run at this time. Increment the time by 1.
+
+     d. If a process is available (shortest_job != -1), execute the selected process. Update the completion time, waiting time, and turnaround time for this process. Mark the burst time of the completed process as -1 to indicate completion.
+
+7. Display the scheduling information in a tabular format, including Process ID (P), Arrival Time (AT), Burst Time (BT), Completion Time (CT), Waiting Time (WT), and Turnaround Time (TAT) for each process.
 
 
 ## PROGRAM:
@@ -263,7 +283,7 @@ int main() {
 }
 ```
 ## OUTPUT:
-
+![](3.png)
 
 ## RESULT:
 Shortest Job First (SJF) Non-preemptive scheduling is implemented successfully.
@@ -273,7 +293,34 @@ Shortest Job First (SJF) Non-preemptive scheduling is implemented successfully.
 To implement Round Robin (RR) Scheduling
 
 ## ALGORITHM:
+1. Initialize variables and arrays to store process information, scheduling data, and status flags.
 
+2. Read the number of processes (n) and the time quantum (tq) from the user.
+
+3. Input process information for each process, including process ID (PRO), arrival time (AT), and burst time (BUT). Also, calculate the total remaining burst time (totalsrt) and create a temporary array (tempsrt) to store the initial burst times.
+
+4. Initialize the queue (queue), front (f), rear (r), and count variables for the ready queue. Also, initialize the timer to 0.
+
+5. Enqueue processes that arrive at time 0 into the ready queue and mark them as entered (isentered) with count increments.
+
+6. Enter the main scheduling loop, which continues until the timer reaches the total remaining burst time (totalsrt).
+
+7. Dequeue a process from the front of the ready queue (queue[f]) and select it for execution.
+
+8. If the selected process is starting for the first time (isstarted is 0), record its start time (ST) and calculate its waiting time (WT).
+
+9. Execute the process for a time quantum (tq) or until its burst time (BUT) is less than tq, whichever comes first. Update the timer accordingly.
+10. If the process has completed its burst time (BUT becomes 0), record its finish time (FT), calculate its waiting time (WT), turnaround time (TT), and response ratio (RR), and mark it as completed (iscompleted).
+
+11. Check for processes that have arrived and have not entered the ready queue (isentered is 0). Enqueue them into the ready queue with count increments.
+
+12. If the selected process is not completed, enqueue it back into the ready queue.
+
+13. Repeat the scheduling loop until the timer reaches totalsrt.
+
+14. Display the scheduling results, including process ID (PRO), arrival time (AT), initial burst time (BUT), start time (ST), finish time (FT), waiting time (WT), turnaround time (TT), and response ratio (RR) for each process.
+
+15. Calculate and display the average waiting time (AWT) and average turnaround time (ATAT) for all processes.
 
 ## PROGRAM:
 ```
@@ -396,30 +443,157 @@ printf("\nAvg turn around time is %5.2f",atat);
 ```
 
 ## OUTPUT:
-![](3.png)
+![](4.png)
 
-## RESULT: Round Robin (RR) Scheduling is implemented successfully.
+## RESULT:
+Round Robin (RR) Scheduling is implemented successfully.
 
 # Priority Preemptive Scheduling
-## AIM: To implement Priority Preemptive Scheduling
+## AIM: 
+To implement Priority Preemptive Scheduling
 
 ## ALGORITHM:
+1. Initialize the necessary variables and data structures, including the struct Process to represent each process.
+
+2. Read the number of processes (n) from the user.
+
+3. Create an array of struct Process to store information for each process.
+
+4. Input process information for each process, including arrival time, burst time, and priority. Store this information in the struct Process array.
+
+5. Initialize the current time (time) to 0 and the completed process count (completed) to 0.
+
+6. Display the Gantt Chart header.
+
+7. Enter the main scheduling loop that continues until all processes have completed execution (completed equals n).
+
+8. Inside the loop, find the highest priority process that has arrived (arrival_time <= time) and has remaining burst time (remaining_time > 0).
+
+9. If a process with the highest priority is found, execute it for 1 unit of time by decrementing its remaining_time and updating the Gantt Chart.
+
+10. If the process has completed its execution (remaining_time becomes 0), increment the completed process count.
+
+11. If no process is available to run at the current time, display a message indicating that no process is running at that time.
+
+12. Repeat the loop until all processes are completed.
+
+13. Display the scheduling results, including the Gantt Chart, process ID, and execution time for each process.
 
 
 ## PROGRAM:
 ```
+#include <stdio.h>
+
+// Structure to represent a process
+struct Process {
+    int id;             // Process ID
+    int arrival_time;   // Arrival time
+    int burst_time;     // Burst time
+    int priority;       // Priority
+    int remaining_time; // Remaining time
+};
+
+// Function to swap two processes
+void swap(struct Process *a, struct Process *b) {
+    struct Process temp = *a;
+    *a = *b;
+    *b = temp;
+}
+
+int main() {
+    int n;
+    printf("Enter the number of processes: ");
+    scanf("%d", &n);
+
+    struct Process processes[n];
+
+    // Input process information
+    for (int i = 0; i < n; i++) {
+        processes[i].id = i + 1;
+        printf("Enter arrival time for process %d: ", processes[i].id);
+        scanf("%d", &processes[i].arrival_time);
+        printf("Enter burst time for process %d: ", processes[i].id);
+        scanf("%d", &processes[i].burst_time);
+        printf("Enter priority for process %d: ", processes[i].id);
+        scanf("%d", &processes[i].priority);
+        processes[i].remaining_time = processes[i].burst_time;
+    }
+
+    int time = 0; // Current time
+    int completed = 0; // Number of completed processes
+
+    printf("\nGantt Chart:\n");
+
+    while (completed < n) {
+        int highest_priority = -1;
+        int highest_priority_job = -1;
+
+        for (int i = 0; i < n; i++) {
+            if (processes[i].arrival_time <= time && processes[i].remaining_time > 0 &&
+                (highest_priority == -1 || processes[i].priority < highest_priority)) {
+                highest_priority = processes[i].priority;
+                highest_priority_job = i;
+            }
+        }
+
+        if (highest_priority_job == -1) {
+            // No process is available to run at this time
+            printf("Time %d: No process\n", time);
+            time++;
+        } else {
+            // Execute the highest priority process for 1 unit of time
+            processes[highest_priority_job].remaining_time--;
+            printf("Time %d: Process %d\n", time, processes[highest_priority_job].id);
+            time++;
+
+            // If the process has completed its execution
+            if (processes[highest_priority_job].remaining_time == 0) {
+                completed++;
+            }
+        }
+    }
+
+    return 0;
+}
+
 
 ```
 ## OUTPUT:
+![](5.png)
 
-
-## RESULT: Priority Preemptive scheduling is implemented successfully.
+## RESULT: 
+Priority Preemptive scheduling is implemented successfully.
 
 # Priority Non-Preemptive Scheduling
-## AIM: To implement Priority Non-Preemptive Scheduling
+## AIM:
+To implement Priority Non-Preemptive Scheduling
 
 ## ALGORITHM:
+1. Initialize variables and arrays to store process information, scheduling data, and status flags.
 
+2. Input the number of processes and their details, including process ID (PID), arrival time (AT), burst time (SRT), and priority.
+
+3. Calculate the total remaining burst time (totalsrt) by summing up the burst times of all processes and create a temporary array (tempsrt) to store the initial burst times.
+
+4. Initialize the timer to 0.
+
+5. Enter the main scheduling loop, which continues until all processes have completed execution (i.e., completed variable reaches n).
+
+6. Within the loop, find the process with the highest priority that has arrived and not yet completed and has the lowest priority (higher priority value).
+
+7. If a process is found, update its start time (ST) and calculate waiting time (WT) if it's starting for the first time (isstarted[i] is 0).
+
+8. Reduce the remaining burst time (SRT) of the selected process by 1, indicating the execution of one time unit.
+
+9. Increment the timer by 1.
+
+10. If the selected process has completed its execution (SRT becomes 0), update its finish time (FT), waiting time (WT), turnaround time (TT), response ratio (RR), and set the process as completed (iscompleted[i] is 1).
+
+11. Continue this loop until all processes are completed.
+
+12. After scheduling all processes, display the scheduling results in a tabular format, including PID, AT, SRT, ST, FT, WT, TT, RR, and priority for each process.
+
+13. Calculate and display the average waiting time (AWT) and average turnaround time (ATAT) for all processes.
 
 ## PROGRAM:
 ```
@@ -501,7 +675,8 @@ printf("The average turn around time is: %5.2f",atat);
 ```
 
 ## OUTPUT:
-![](
+![](6.png)
 
-## RESULT: Priority Non-preemptive scheduling is implemented successfully.
+## RESULT: 
+Priority Non-preemptive scheduling is implemented successfully.
 
